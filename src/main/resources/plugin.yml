@@ -1,0 +1,13 @@
+name: ${project.name}
+main: ${project.groupId}.${project.artifactId}.Entry
+version: ${project.version}
+author: ghowden/Eluinhost
+database: false
+commands:
+  matchpost:
+    description: Show/set match post contents
+permissions:
+  uhc.matchpost.command.use:
+    default: true
+  uhc.matchpost.command.set:
+    default: op
