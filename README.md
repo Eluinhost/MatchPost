@@ -8,7 +8,7 @@ tables are currently not supported and will not show up in chat.
 
 Example:
 
-![Example](http://puu.sh/ki23A/06b8946d7d.png)
+![Example](images/example.png)
 
 Anything stored in `current.md` is automatically loaded on server startup as the match post. 
 Commands will also modify the `current.md` file to make sure they stick across restarts.
