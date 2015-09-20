@@ -1,6 +1,8 @@
 MatchPost
 =========
 
+**Requires: Java 7+ and Spigot 1.8+**
+
 This is a plugin that helps players by allowing them to view a copy of the match post in-game.
 
 The plugin tries to format the Reddit markdown in a way that is usable in-game. (links are clickable e.t.c.). Reddit
