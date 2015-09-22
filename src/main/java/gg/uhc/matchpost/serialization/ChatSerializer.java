@@ -14,8 +14,10 @@ import java.util.Stack;
 
 public class ChatSerializer extends Serializer {
 
+    // generic StringBuilder wrapper with util
     protected Printer printer = new Printer();
 
+    // use peek() to get current stack item
     protected Stack<BaseComponent> stack;
 
     public BaseComponent readFromRoot(RootNode astRoot) {
@@ -241,37 +243,43 @@ public class ChatSerializer extends Serializer {
 
     @Override
     public void visit(TableBodyNode tableBodyNode) {
-        // todo
+        // draw horizontal line?
+        visit(new SimpleNode(SimpleNode.Type.HRule));
+        visitChildren(tableBodyNode);
     }
 
     @Override
     public void visit(TableCaptionNode tableCaptionNode) {
-        // todo
+        visitChildren(tableCaptionNode);
     }
 
     @Override
     public void visit(TableCellNode tableCellNode) {
-        // todo
+        renderText("| ").setBold(true);
+        visitChildren(tableCellNode);
+        renderText(" |").setBold(true);
     }
 
     @Override
     public void visit(TableColumnNode tableColumnNode) {
-        // todo
+        visitChildren(tableColumnNode);
     }
 
     @Override
     public void visit(TableHeaderNode tableHeaderNode) {
-        // todo
+        TextComponent header = makeNewLevel(tableHeaderNode);
+        header.setBold(true);
     }
 
     @Override
     public void visit(TableNode tableNode) {
-        // todo
+        visitChildren(tableNode);
     }
 
     @Override
     public void visit(TableRowNode tableRowNode) {
-        // todo
+        visitChildren(tableRowNode);
+        visit(new SimpleNode(SimpleNode.Type.Linebreak));
     }
 
     @Override
