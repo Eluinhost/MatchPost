@@ -20,6 +20,9 @@ public class ChatSerializer extends Serializer {
     // use peek() to get current stack item
     protected Stack<BaseComponent> stack;
 
+    protected TableNode currentTableNode;
+    protected int currentTableColumn;
+
     public BaseComponent readFromRoot(RootNode astRoot) {
         // empty root element
         TextComponent root = new TextComponent("");
@@ -257,9 +260,24 @@ public class ChatSerializer extends Serializer {
 
     @Override
     public void visit(TableCellNode tableCellNode) {
-        renderText("| ").setBold(true);
+        List<TableColumnNode> columns = currentTableNode.getColumns();
+
+        boolean initial = currentTableColumn == 0;
+        boolean end = currentTableColumn + tableCellNode.getColSpan() >= columns.size();
+
+        // only render left space on non-initial columns
+        if (initial) {
+            renderText("| ").setBold(true);
+        } else {
+            renderText(" | ").setBold(true);
+        }
         visitChildren(tableCellNode);
-        renderText(" |").setBold(true);
+        // render closing pipe
+        if (end) {
+            renderText(" |").setBold(true);
+        }
+
+        currentTableColumn += tableCellNode.getColSpan();
     }
 
     @Override
@@ -274,11 +292,14 @@ public class ChatSerializer extends Serializer {
 
     @Override
     public void visit(TableNode tableNode) {
+        currentTableNode = tableNode;
         visitChildren(tableNode);
+        currentTableNode = null;
     }
 
     @Override
     public void visit(TableRowNode tableRowNode) {
+        currentTableColumn = 0;
         // line break before every row
         visit(new SimpleNode(SimpleNode.Type.Linebreak));
         visitChildren(tableRowNode);
