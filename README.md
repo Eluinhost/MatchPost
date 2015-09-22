@@ -14,7 +14,8 @@ Example:
 
 Anything stored in `current.md` is automatically loaded on server startup as the match post. 
 Commands will also modify the `current.md` file to make sure they stick across restarts.
-If no `current.md` file exists on startup it is assumed there is no post.
+If no `current.md` file exists on startup it is assumed there is no post. If you change the contents 
+of the file, use `/matchpost current.md` to use the new contents.
 
 # Commands
 
