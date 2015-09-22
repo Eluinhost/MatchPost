@@ -23,6 +23,14 @@ public class ChatSerializer extends Serializer {
     protected TableNode currentTableNode;
     protected int currentTableColumn;
 
+    protected ListType currentListType;
+    protected int currentListNumber;
+
+    enum ListType {
+        BULLET,
+        NUMBERED
+    }
+
     public BaseComponent readFromRoot(RootNode astRoot) {
         // empty root element
         TextComponent root = new TextComponent("");
@@ -67,7 +75,7 @@ public class ChatSerializer extends Serializer {
 
     @Override
     public void visit(BulletListNode bulletListNode) {
-        renderText("• ");
+        currentListType = ListType.BULLET;
         visitChildren(bulletListNode);
     }
 
@@ -123,7 +131,12 @@ public class ChatSerializer extends Serializer {
 
     @Override
     public void visit(ListItemNode listItemNode) {
-        renderText("- ");
+        switch (currentListType) {
+            case BULLET:
+                renderText("• "); break;
+            case NUMBERED:
+                renderText(currentListNumber++ + ": "); break;
+        }
         visitChildren(listItemNode);
     }
 
@@ -134,7 +147,8 @@ public class ChatSerializer extends Serializer {
 
     @Override
     public void visit(OrderedListNode orderedListNode) {
-        renderText("- ");
+        currentListType = ListType.NUMBERED;
+        currentListNumber = 1;
         visitChildren(orderedListNode);
     }
 
