@@ -48,8 +48,8 @@ public class ChatSerializer extends Serializer {
 
     @Override
     public void visit(AnchorLinkNode anchorLinkNode) {
-        TextComponent component = renderText(anchorLinkNode.getText());
-        component.setColor(ChatColor.BLUE);
+        // same as a regular link but without an underline
+        renderText(anchorLinkNode.getText()).setColor(ChatColor.BLUE);
     }
 
     @Override
@@ -59,12 +59,12 @@ public class ChatSerializer extends Serializer {
 
     @Override
     public void visit(BlockQuoteNode blockQuoteNode) {
-        TextComponent component = makeNewLevel(blockQuoteNode);
-        component.setColor(ChatColor.DARK_GRAY);
+        makeNewLevel(blockQuoteNode).setColor(ChatColor.DARK_GRAY);
     }
 
     @Override
     public void visit(BulletListNode bulletListNode) {
+        renderText("• ");
         visitChildren(bulletListNode);
     }
 
@@ -120,8 +120,8 @@ public class ChatSerializer extends Serializer {
 
     @Override
     public void visit(ListItemNode listItemNode) {
-        TextComponent component = makeNewLevel(listItemNode);
-        component.setText("- ");
+        renderText("- ");
+        visitChildren(listItemNode);
     }
 
     @Override
@@ -131,15 +131,15 @@ public class ChatSerializer extends Serializer {
 
     @Override
     public void visit(OrderedListNode orderedListNode) {
-        TextComponent component = makeNewLevel(orderedListNode);
-        component.setText("- ");
+        renderText("- ");
+        visitChildren(orderedListNode);
     }
 
     @Override
     public void visit(ParaNode paraNode) {
-        renderText("\n");
+        visit(new SimpleNode(SimpleNode.Type.Linebreak));
         visitChildren(paraNode);
-        renderText("\n");
+        visit(new SimpleNode(SimpleNode.Type.Linebreak));
     }
 
     @Override
@@ -194,7 +194,7 @@ public class ChatSerializer extends Serializer {
                 renderText("-");
                 break;
             case HRule:
-                TextComponent component = renderText("\n----------\n");
+                TextComponent component = renderText("\n-----------------------------------------------------\n");
                 component.setColor(ChatColor.GRAY);
                 component.setStrikethrough(true);
                 break;
@@ -219,8 +219,7 @@ public class ChatSerializer extends Serializer {
 
     @Override
     public void visit(StrikeNode strikeNode) {
-        TextComponent component = makeNewLevel(strikeNode);
-        component.setStrikethrough(true);
+        makeNewLevel(strikeNode).setStrikethrough(true);
     }
 
     @Override
@@ -243,8 +242,11 @@ public class ChatSerializer extends Serializer {
 
     @Override
     public void visit(TableBodyNode tableBodyNode) {
-        // draw horizontal line?
-        visit(new SimpleNode(SimpleNode.Type.HRule));
+        // draw horizontal line
+        TextComponent component = renderText("\n-----------------------------------------------------");
+        component.setColor(ChatColor.GRAY);
+        component.setStrikethrough(true);
+
         visitChildren(tableBodyNode);
     }
 
@@ -267,8 +269,7 @@ public class ChatSerializer extends Serializer {
 
     @Override
     public void visit(TableHeaderNode tableHeaderNode) {
-        TextComponent header = makeNewLevel(tableHeaderNode);
-        header.setBold(true);
+        makeNewLevel(tableHeaderNode).setBold(true);
     }
 
     @Override
@@ -278,8 +279,9 @@ public class ChatSerializer extends Serializer {
 
     @Override
     public void visit(TableRowNode tableRowNode) {
-        visitChildren(tableRowNode);
+        // line break before every row
         visit(new SimpleNode(SimpleNode.Type.Linebreak));
+        visitChildren(tableRowNode);
     }
 
     @Override
