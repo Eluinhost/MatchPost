@@ -154,7 +154,6 @@ public class ChatSerializer extends Serializer {
 
     @Override
     public void visit(ParaNode paraNode) {
-        visit(new SimpleNode(SimpleNode.Type.Linebreak));
         visitChildren(paraNode);
         visit(new SimpleNode(SimpleNode.Type.Linebreak));
     }
