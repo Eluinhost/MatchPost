@@ -117,6 +117,7 @@ public class ChatSerializer extends Serializer {
         TextComponent component = makeNewLevel(headerNode);
         component.setBold(true);
         component.setColor(ChatColor.GOLD);
+        visit(new SimpleNode(SimpleNode.Type.Linebreak));
     }
 
     @Override
