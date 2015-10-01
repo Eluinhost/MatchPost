@@ -1,8 +1,7 @@
 package gg.uhc.matchpost.command;
 
-import gg.uhc.matchpost.reddit.MatchPostController;
 import gg.uhc.matchpost.async.CommandSenderMessenger;
-import gg.uhc.matchpost.chat.ChatSender;
+import gg.uhc.matchpost.reddit.MatchPostController;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,10 +14,8 @@ public class MatchPostCommand implements CommandExecutor {
     public static final String SET_PERMISSION = "uhc.matchpost.command.set";
 
     protected final MatchPostController matchPostController;
-    protected final ChatSender chatSender;
 
-    public MatchPostCommand(MatchPostController matchPostController, ChatSender chatSender) {
-        this.chatSender = chatSender;
+    public MatchPostCommand(MatchPostController matchPostController) {
         this.matchPostController = matchPostController;
     }
 
@@ -37,7 +34,7 @@ public class MatchPostCommand implements CommandExecutor {
                 return true;
             }
 
-            chatSender.sendChat(matchPostController.getMatchPost(), (Player) commandSender);
+            ((Player) commandSender).spigot().sendMessage(matchPostController.getMatchPost());
             return true;
         }
 
